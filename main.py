@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 import requests
 import os
+import telegram
 
 
 def download_image(url, filename):
@@ -74,3 +75,10 @@ if __name__ == "__main__":
                   f"/{image}.png?api_key={token}"
             filename = f"space_epic{image_number + 1}.png"
             download_image(url, filename)
+
+    token = os.environ["TGM_TOKEN"]
+    bot = telegram.Bot(token=token)
+    updates = bot.get_updates()
+    if len(updates) > 0:
+        chat_id = updates[-1].effective_chat.id
+        bot.send_message(chat_id=chat_id, text="First message")
