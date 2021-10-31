@@ -99,8 +99,8 @@ if __name__ == "__main__":
             chat_id = updates[-1].effective_chat.id
             mypath = "images"
             for path_to_file in listdir(mypath):
-                time.sleep(40)  # телеграмм ругается если добавлять изображения
-                # чаще 40 секунд
                 if isfile(joinpath(mypath, path_to_file)):
                     bot.send_document(chat_id=chat_id, document=open(
                         f"{mypath}/{path_to_file}", 'rb'))
+                time.sleep(40)  # телеграмм ругается если добавлять изображения
+                # чаще 40 секунд
