@@ -82,3 +82,5 @@ if __name__ == "__main__":
     if len(updates) > 0:
         chat_id = updates[-1].effective_chat.id
         bot.send_message(chat_id=chat_id, text="First message")
+        bot.send_document(chat_id=chat_id, document=open(
+            'images/space_epic1.png', 'rb'))
