@@ -23,6 +23,9 @@ wheels/
 share/python-wheels/
 *.egg-info/
 images/
+*/images/
+./images/
+.images
 bot.py
 .installed.cfg
 *.egg
