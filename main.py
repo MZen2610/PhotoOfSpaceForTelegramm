@@ -18,7 +18,7 @@ def download_image(url, filename, ifmain="./images/"):
     response = requests.get(url)
     response.raise_for_status()
 
-    with open(directory + "/" + filename, "wb") as file:
+    with open(f"{directory}/{filename}", "wb") as file:
         file.write(response.content)
 
 
