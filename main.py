@@ -90,8 +90,7 @@ def add_photo_telegramm():
             if isfile(joinpath(mypath, path_to_file)):
                 bot.send_document(chat_id=chat_id, document=open(
                     f"{mypath}/{path_to_file}", 'rb'))
-            time.sleep(40)  # телеграмм ругается если добавлять изображения
-            # чаще 40 секунд
+
 
 
 def main():
@@ -112,5 +111,5 @@ if __name__ == "__main__":
     tgm_token = os.environ["TGM_TOKEN"]
 
     while True:
-        time.sleep(10)
+        time.sleep(86400)
         main()
