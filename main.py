@@ -28,29 +28,14 @@ def get_extension(url: str):
 
 
 def fetch_spacex_last_launch(url: str):
+    response = requests.get(url)
+    response.raise_for_status()
+    return response.json()
+
+
+def main():
     try:
-        response = requests.get(url)
-        response.raise_for_status()
-        if response.ok:
-            return response.json()
-        else:
-            return None
-    except requests.exceptions.HTTPError:
-        print("Проверьте вводимый адрес")
-    except requests.exceptions.ConnectionError:
-        print("Нет соединения")
-
-
-if __name__ == "__main__":
-    load_dotenv()
-    nasa_token = os.environ["NASA_TOKEN"]
-    tgm_token = os.environ["TGM_TOKEN"]
-
-    while True:
-        time.sleep(10)
-
         url = "https://api.spacexdata.com/v3/launches/past"
-        data_spacex = None
         data_spacex = fetch_spacex_last_launch(url)
         step = 1
         images = data_spacex[-step]["links"]["flickr_images"]
@@ -64,7 +49,6 @@ if __name__ == "__main__":
             download_image(image_url, filename)
 
         url = f"https://api.nasa.gov/planetary/apod?api_key={nasa_token}&count=30"
-        data_spacenasa = None
         data_spacenasa = fetch_spacex_last_launch(url)
         for image_number, image_url in enumerate(data_spacenasa):
             extension = get_extension(image_url["url"])
@@ -73,7 +57,6 @@ if __name__ == "__main__":
 
         today = datetime.date(datetime.today())
         url = f"https://api.nasa.gov/EPIC/api/natural/date/{today}?api_key={nasa_token}"
-        data_space_epic = None
         data_space_epic = fetch_spacex_last_launch(url)
         step = 1
         while len(data_space_epic) == 0:
@@ -90,6 +73,22 @@ if __name__ == "__main__":
                   f"/{image}.png?api_key={nasa_token}"
             filename = f"space_epic{image_number + 1}.png"
             download_image(url, filename)
+
+    except requests.exceptions.HTTPError:
+        print("Проверьте вводимый адрес")
+    except requests.exceptions.ConnectionError:
+        print("Нет соединения")
+
+
+if __name__ == "__main__":
+    load_dotenv()
+    nasa_token = os.environ["NASA_TOKEN"]
+    tgm_token = os.environ["TGM_TOKEN"]
+
+    while True:
+        time.sleep(10)
+
+        main()
 
         bot = telegram.Bot(token=tgm_token)
         updates = bot.get_updates()
