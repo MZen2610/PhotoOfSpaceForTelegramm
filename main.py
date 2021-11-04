@@ -27,7 +27,7 @@ def get_extension(url: str):
     return splitext(spl.path)[1]
 
 
-def fetch_spacex_last_launch(url: str):
+def execute_request(url: str):
     response = requests.get(url)
     response.raise_for_status()
     return response.json()
@@ -35,7 +35,7 @@ def fetch_spacex_last_launch(url: str):
 
 def get_photo_spacex():
     url = "https://api.spacexdata.com/v3/launches/past"
-    data_spacex = fetch_spacex_last_launch(url)
+    data_spacex = execute_request(url)
     step = 1
     images = data_spacex[-step]["links"]["flickr_images"]
     while len(images) == 0:
@@ -50,7 +50,7 @@ def get_photo_spacex():
 
 def get_photo_spacenasa():
     url = f"https://api.nasa.gov/planetary/apod?api_key={nasa_token}&count=30"
-    data_spacenasa = fetch_spacex_last_launch(url)
+    data_spacenasa = execute_request(url)
     for image_number, image_url in enumerate(data_spacenasa):
         extension = get_extension(image_url["url"])
         filename = f"spacenasa{image_number + 1}{extension}"
@@ -61,13 +61,13 @@ def get_photo_space_epic():
     today = datetime.date(datetime.today())
     url = f"https://api.nasa.gov/EPIC/api/natural/date/{today} ?api_key" \
           f"={nasa_token}"
-    data_space_epic = fetch_spacex_last_launch(url)
+    data_space_epic = execute_request(url)
     step = 1
     while len(data_space_epic) == 0:
         result_date = today - timedelta(days=step)
         url = f"https://api.nasa.gov/EPIC/api/natural/date/{result_date} " \
               f"?api_key={nasa_token}"
-        data_space_epic = fetch_spacex_last_launch(url)
+        data_space_epic = execute_request(url)
         step += 1
 
     for image_number, image_url in enumerate(data_space_epic):
@@ -90,7 +90,6 @@ def add_photo_telegramm():
             if isfile(joinpath(mypath, path_to_file)):
                 bot.send_document(chat_id=chat_id, document=open(
                     f"{mypath}/{path_to_file}", 'rb'))
-
 
 
 def main():
