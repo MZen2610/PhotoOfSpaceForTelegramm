@@ -1,15 +1,14 @@
-import time
-from urllib.parse import urlsplit, unquote
-from os.path import split, splitext
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from os import listdir
-from os.path import isfile
+from os.path import isfile, split, splitext
 from os.path import join as joinpath
+from urllib.parse import urlsplit, unquote
 
-import requests
 import os
+import requests
 import telegram
+import time
 
 
 def download_image(url, filename):
