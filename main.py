@@ -11,9 +11,8 @@ import telegram
 import time
 
 
-def download_image(url, filename):
-    file_path = "./images/"
-    directory = os.path.dirname(file_path)
+def download_image(url, filename, ifmain="./images/"):
+    directory = os.path.dirname(ifmain)
     if not os.path.exists(directory):
         os.makedirs(directory)
     response = requests.get(url)
