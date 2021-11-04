@@ -24,7 +24,7 @@ def download_image(url, filename, ifmain="./images/"):
 
 def get_extension(url: str):
     spl = urlsplit(unquote(url))
-    return splitext(split(spl.path)[1])[1]
+    return splitext(spl.path)[1]
 
 
 def fetch_spacex_last_launch(url: str):
