@@ -11,11 +11,11 @@ import telegram
 import time
 
 
-def download_image(url, filename, ifmain="./images/"):
+def download_image(url, filename, params={}, ifmain="./images/"):
     directory = os.path.dirname(ifmain)
     if not os.path.exists(directory):
         os.makedirs(directory)
-    response = requests.get(url)
+    response = requests.get(url, params)
     response.raise_for_status()
 
     with open(f"{directory}/{filename}", "wb") as file:
@@ -27,8 +27,8 @@ def get_extension(url: str):
     return splitext(spl.path)[1]
 
 
-def execute_request(url: str):
-    response = requests.get(url)
+def execute_request(url: str, payload=dict()):
+    response = requests.get(url, params=payload)
     response.raise_for_status()
     return response.json()
 
@@ -49,8 +49,9 @@ def get_photo_spacex():
 
 
 def get_photo_spacenasa():
-    url = f"https://api.nasa.gov/planetary/apod?api_key={nasa_token}&count=30"
-    data_spacenasa = execute_request(url)
+    url = f"https://api.nasa.gov/planetary/apod"
+    params = {"api_key": nasa_token, "count": 30}
+    data_spacenasa = execute_request(url, params)
     for image_number, image_url in enumerate(data_spacenasa):
         extension = get_extension(image_url["url"])
         filename = f"spacenasa{image_number + 1}{extension}"
@@ -59,15 +60,15 @@ def get_photo_spacenasa():
 
 def get_photo_space_epic():
     today = datetime.date(datetime.today())
-    url = f"https://api.nasa.gov/EPIC/api/natural/date/{today} ?api_key" \
-          f"={nasa_token}"
-    data_space_epic = execute_request(url)
+    url = f"https://api.nasa.gov/EPIC/api/natural/date/{today}"
+    params = {"api_key": nasa_token}
+    data_space_epic = execute_request(url, params)
     step = 1
     while len(data_space_epic) == 0:
         result_date = today - timedelta(days=step)
-        url = f"https://api.nasa.gov/EPIC/api/natural/date/{result_date} " \
-              f"?api_key={nasa_token}"
-        data_space_epic = execute_request(url)
+        url = f"https://api.nasa.gov/EPIC/api/natural/date/{result_date}"
+        params = {"api_key": nasa_token}
+        data_space_epic = execute_request(url, params)
         step += 1
 
     for image_number, image_url in enumerate(data_space_epic):
@@ -75,9 +76,10 @@ def get_photo_space_epic():
             "%Y/%m/%d")
         image = image_url["image"]
         url = f"https://api.nasa.gov/EPIC/archive/natural/{image_date}/png" \
-              f"/{image}.png?api_key={nasa_token}"
+              f"/{image}.png"
+        params = {"api_key": nasa_token}
         filename = f"space_epic{image_number + 1}.png"
-        download_image(url, filename)
+        download_image(url, filename, params)
 
 
 def add_photo_telegramm():
@@ -110,5 +112,5 @@ if __name__ == "__main__":
     tgm_token = os.environ["TGM_TOKEN"]
 
     while True:
-        time.sleep(86400)
         main()
+        time.sleep(86400)
