@@ -42,9 +42,9 @@ def get_photo_spacex():
         step += 1
         images = data_spacex[-step]["links"]["flickr_images"]
 
-    for image_number, image_url in enumerate(images):
+    for image_number, image_url in enumerate(images, start=1):
         extension = get_extension(image_url)
-        filename = f"spacex{image_number + 1}{extension}"
+        filename = f"spacex{image_number}{extension}"
         download_image(image_url, filename)
 
 
@@ -52,9 +52,9 @@ def get_photo_spacenasa():
     url = f"https://api.nasa.gov/planetary/apod"
     params = {"api_key": nasa_token, "count": 30}
     data_spacenasa = execute_request(url, params)
-    for image_number, image_url in enumerate(data_spacenasa):
+    for image_number, image_url in enumerate(data_spacenasa, start=1):
         extension = get_extension(image_url["url"])
-        filename = f"spacenasa{image_number + 1}{extension}"
+        filename = f"spacenasa{image_number}{extension}"
         download_image(image_url["url"], filename)
 
 
@@ -71,14 +71,14 @@ def get_photo_space_epic():
         data_space_epic = execute_request(url, params)
         step += 1
 
-    for image_number, image_url in enumerate(data_space_epic):
+    for image_number, image_url in enumerate(data_space_epic, start=1):
         image_date = datetime.fromisoformat(image_url["date"]).strftime(
             "%Y/%m/%d")
         image = image_url["image"]
         url = f"https://api.nasa.gov/EPIC/archive/natural/{image_date}/png" \
               f"/{image}.png"
         params = {"api_key": nasa_token}
-        filename = f"space_epic{image_number + 1}.png"
+        filename = f"space_epic{image_number}.png"
         download_image(url, filename, params)
 
 
