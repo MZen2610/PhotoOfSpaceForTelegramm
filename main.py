@@ -13,7 +13,6 @@ import time
 
 def save_folder(ifmain):
     directory = os.path.dirname(ifmain)
-    # if not os.path.exists(directory):
     os.makedirs(directory, exist_ok=True)
     return directory
 
@@ -93,7 +92,6 @@ def add_photo_telegramm(mypath):
     updates = bot.get_updates()
     if len(updates) > 0:
         chat_id = updates[-1].effective_chat.id
-        # mypath = "images"
         for path_to_file in listdir(mypath):
             if isfile(joinpath(mypath, path_to_file)):
                 bot.send_document(chat_id=chat_id, document=open(
@@ -103,9 +101,9 @@ def add_photo_telegramm(mypath):
 def main():
     try:
         get_photo_spacex()
-        # get_photo_spacenasa()
-        # get_photo_space_epic()
-        # add_photo_telegramm("images")
+        get_photo_spacenasa()
+        get_photo_space_epic()
+        add_photo_telegramm("images")
     except requests.exceptions.HTTPError:
         print("Проверьте вводимый адрес")
     except requests.exceptions.ConnectionError:
