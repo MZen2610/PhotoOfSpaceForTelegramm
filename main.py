@@ -17,8 +17,8 @@ def save_folder(ifmain):
     return directory
 
 
-def download_image(url, filename, params={}, ifmain="./images/"):
-    directory = save_folder(ifmain)
+def download_image(url, filename, params={}, folder_with_photo="./images/"):
+    directory = save_folder(folder_with_photo)
 
     response = requests.get(url, params)
     response.raise_for_status()
@@ -50,7 +50,7 @@ def get_photo_spacex():
     for image_number, image_url in enumerate(images, start=1):
         extension = get_extension(image_url)
         filename = f"spacex{image_number}{extension}"
-        download_image(image_url, filename, ifmain="./images/")
+        download_image(image_url, filename, folder_with_photo="./images/")
 
 
 def get_photo_spacenasa():
@@ -60,7 +60,8 @@ def get_photo_spacenasa():
     for image_number, image_url in enumerate(data_spacenasa, start=1):
         extension = get_extension(image_url["url"])
         filename = f"spacenasa{image_number}{extension}"
-        download_image(image_url["url"], filename, ifmain="./images/")
+        download_image(image_url["url"], filename,
+                       folder_with_photo="./images/")
 
 
 def get_photo_space_epic():
@@ -84,7 +85,7 @@ def get_photo_space_epic():
               f"/{image}.png"
         params = {"api_key": nasa_token}
         filename = f"space_epic{image_number}.png"
-        download_image(url, filename, params, ifmain="./images/")
+        download_image(url, filename, params, folder_with_photo="./images/")
 
 
 def add_photo_telegramm(mypath):
