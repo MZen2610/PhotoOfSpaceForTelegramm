@@ -53,9 +53,9 @@ def get_photo_spacex():
         download_image(image_url, filename, folder_with_photo="./images/")
 
 
-def get_photo_spacenasa():
+def get_photo_spacenasa(token):
     url = "https://api.nasa.gov/planetary/apod"
-    params = {"api_key": nasa_token, "count": 30}
+    params = {"api_key": token, "count": 30}
     data_spacenasa = execute_request(url, params)
     for image_number, image_url in enumerate(data_spacenasa, start=1):
         extension = get_extension(image_url["url"])
@@ -64,16 +64,16 @@ def get_photo_spacenasa():
                        folder_with_photo="./images/")
 
 
-def get_photo_space_epic():
+def get_photo_space_epic(token):
     today = datetime.date(datetime.today())
     url = f"https://api.nasa.gov/EPIC/api/natural/date/{today}"
-    params = {"api_key": nasa_token}
+    params = {"api_key": token}
     data_space_epic = execute_request(url, params)
     step = 1
     while len(data_space_epic) == 0:
         result_date = today - timedelta(days=step)
         url = f"https://api.nasa.gov/EPIC/api/natural/date/{result_date}"
-        params = {"api_key": nasa_token}
+        params = {"api_key": token}
         data_space_epic = execute_request(url, params)
         step += 1
 
@@ -83,13 +83,13 @@ def get_photo_space_epic():
         image = image_url["image"]
         url = f"https://api.nasa.gov/EPIC/archive/natural/{image_date}/png" \
               f"/{image}.png"
-        params = {"api_key": nasa_token}
+        params = {"api_key": token}
         filename = f"space_epic{image_number}.png"
         download_image(url, filename, params, folder_with_photo="./images/")
 
 
-def add_photo_telegramm(mypath):
-    bot = telegram.Bot(token=tgm_token)
+def add_photo_telegramm(token, mypath):
+    bot = telegram.Bot(token=token)
     updates = bot.get_updates()
     if len(updates) > 0:
         chat_id = updates[-1].effective_chat.id
@@ -99,7 +99,7 @@ def add_photo_telegramm(mypath):
                     f"{mypath}/{path_to_file}", 'rb'))
 
 
-if __name__ == "__main__":
+def main():
     load_dotenv()
     nasa_token = os.environ["NASA_TOKEN"]
     tgm_token = os.environ["TGM_TOKEN"]
@@ -107,11 +107,16 @@ if __name__ == "__main__":
     while True:
         try:
             get_photo_spacex()
-            get_photo_spacenasa()
-            get_photo_space_epic()
-            add_photo_telegramm("images")
+            get_photo_spacenasa(nasa_token)
+            get_photo_space_epic(nasa_token)
+            add_photo_telegramm(tgm_token, "images")
         except requests.exceptions.HTTPError:
             print("Проверьте вводимый адрес")
         except requests.exceptions.ConnectionError:
             print("Нет соединения")
+
         time.sleep(86400)
+
+
+if __name__ == "__main__":
+    main()
