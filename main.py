@@ -13,8 +13,8 @@ import time
 
 def save_folder(ifmain):
     directory = os.path.dirname(ifmain)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    # if not os.path.exists(directory):
+    os.makedirs(directory, exist_ok=True)
     return directory
 
 
@@ -51,7 +51,7 @@ def get_photo_spacex():
     for image_number, image_url in enumerate(images, start=1):
         extension = get_extension(image_url)
         filename = f"spacex{image_number}{extension}"
-        download_image(image_url, filename, "./images/")
+        download_image(image_url, filename, ifmain="./images/")
 
 
 def get_photo_spacenasa():
@@ -61,7 +61,7 @@ def get_photo_spacenasa():
     for image_number, image_url in enumerate(data_spacenasa, start=1):
         extension = get_extension(image_url["url"])
         filename = f"spacenasa{image_number}{extension}"
-        download_image(image_url["url"], filename, "./images/")
+        download_image(image_url["url"], filename, ifmain="./images/")
 
 
 def get_photo_space_epic():
@@ -85,7 +85,7 @@ def get_photo_space_epic():
               f"/{image}.png"
         params = {"api_key": nasa_token}
         filename = f"space_epic{image_number}.png"
-        download_image(url, filename, params, "./images/")
+        download_image(url, filename, params, ifmain="./images/")
 
 
 def add_photo_telegramm(mypath):
@@ -103,9 +103,9 @@ def add_photo_telegramm(mypath):
 def main():
     try:
         get_photo_spacex()
-        get_photo_spacenasa()
-        get_photo_space_epic()
-        add_photo_telegramm("images")
+        # get_photo_spacenasa()
+        # get_photo_space_epic()
+        # add_photo_telegramm("images")
     except requests.exceptions.HTTPError:
         print("Проверьте вводимый адрес")
     except requests.exceptions.ConnectionError:
