@@ -17,7 +17,7 @@ def save_folder(ifmain):
     return directory
 
 
-def download_image(url, filename, params={}, folder_with_photo="./images/"):
+def download_images(url, filename, params={}, folder_with_photo="./images/"):
     directory = save_folder(folder_with_photo)
 
     response = requests.get(url, params)
@@ -38,7 +38,7 @@ def execute_request(url: str, payload=dict()):
     return response.json()
 
 
-def get_photo_spacex():
+def get_spacex_photos():
     url = "https://api.spacexdata.com/v3/launches/past"
     data_spacex = execute_request(url)
     step = 1
@@ -50,21 +50,21 @@ def get_photo_spacex():
     for image_number, image_url in enumerate(images, start=1):
         extension = get_extension(image_url)
         filename = f"spacex{image_number}{extension}"
-        download_image(image_url, filename, folder_with_photo="./images/")
+        download_images(image_url, filename, folder_with_photo="./images/")
 
 
-def get_photo_space_nasa(token):
+def get_space_nasa_photos(token):
     url = "https://api.nasa.gov/planetary/apod"
     params = {"api_key": token, "count": 30}
     data_space_nasa = execute_request(url, params)
     for image_number, image_url in enumerate(data_space_nasa, start=1):
         extension = get_extension(image_url["url"])
         filename = f"spacenasa{image_number}{extension}"
-        download_image(image_url["url"], filename,
-                       folder_with_photo="./images/")
+        download_images(image_url["url"], filename,
+                        folder_with_photo="./images/")
 
 
-def get_photo_space_epic(token):
+def get_space_epic_photos(token):
     today = datetime.date(datetime.today())
     url = f"https://api.nasa.gov/EPIC/api/natural/date/{today}"
     params = {"api_key": token}
@@ -85,10 +85,10 @@ def get_photo_space_epic(token):
               f"/{image}.png"
         params = {"api_key": token}
         filename = f"space_epic{image_number}.png"
-        download_image(url, filename, params, folder_with_photo="./images/")
+        download_images(url, filename, params, folder_with_photo="./images/")
 
 
-def add_photo_telegramm(token, my_path):
+def add_telegramm_photos(token, my_path):
     bot = telegram.Bot(token=token)
     updates = bot.get_updates()
     if len(updates) > 0:
@@ -106,10 +106,10 @@ def main():
 
     while True:
         try:
-            get_photo_spacex()
-            get_photo_space_nasa(NASA_TOKEN)
-            get_photo_space_epic(NASA_TOKEN)
-            add_photo_telegramm(TGM_TOKEN, "images")
+            get_spacex_photos()
+            get_space_nasa_photos(NASA_TOKEN)
+            get_space_epic_photos(NASA_TOKEN)
+            add_telegramm_photos(TGM_TOKEN, "images")
         except requests.exceptions.HTTPError:
             print("Проверьте вводимый адрес")
         except requests.exceptions.ConnectionError:
