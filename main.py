@@ -95,8 +95,8 @@ def add_photo_telegramm(token, mypath):
         chat_id = updates[-1].effective_chat.id
         for path_to_file in listdir(mypath):
             if isfile(joinpath(mypath, path_to_file)):
-                bot.send_document(chat_id=chat_id, document=open(
-                    f"{mypath}/{path_to_file}", 'rb'))
+                with open(f"{mypath}/{path_to_file}", 'rb') as file:
+                    bot.send_document(chat_id=chat_id, document=file.read())
 
 
 def main():
