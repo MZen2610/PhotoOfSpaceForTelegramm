@@ -45,7 +45,7 @@ def get_photo_spacex():
     for image_number, image_url in enumerate(images, start=1):
         extension = get_extension(image_url)
         filename = f"spacex{image_number}{extension}"
-        download_image(image_url, filename)
+        download_image(image_url, filename, "./images/")
 
 
 def get_photo_spacenasa():
@@ -55,7 +55,7 @@ def get_photo_spacenasa():
     for image_number, image_url in enumerate(data_spacenasa, start=1):
         extension = get_extension(image_url["url"])
         filename = f"spacenasa{image_number}{extension}"
-        download_image(image_url["url"], filename)
+        download_image(image_url["url"], filename, "./images/")
 
 
 def get_photo_space_epic():
@@ -79,15 +79,15 @@ def get_photo_space_epic():
               f"/{image}.png"
         params = {"api_key": nasa_token}
         filename = f"space_epic{image_number}.png"
-        download_image(url, filename, params)
+        download_image(url, filename, params, "./images/")
 
 
-def add_photo_telegramm():
+def add_photo_telegramm(mypath):
     bot = telegram.Bot(token=tgm_token)
     updates = bot.get_updates()
     if len(updates) > 0:
         chat_id = updates[-1].effective_chat.id
-        mypath = "images"
+        # mypath = "images"
         for path_to_file in listdir(mypath):
             if isfile(joinpath(mypath, path_to_file)):
                 bot.send_document(chat_id=chat_id, document=open(
@@ -99,7 +99,7 @@ def main():
         get_photo_spacex()
         get_photo_spacenasa()
         get_photo_space_epic()
-        add_photo_telegramm()
+        add_photo_telegramm("images")
     except requests.exceptions.HTTPError:
         print("Проверьте вводимый адрес")
     except requests.exceptions.ConnectionError:
