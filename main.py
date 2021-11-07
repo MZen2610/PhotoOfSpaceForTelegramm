@@ -99,23 +99,19 @@ def add_photo_telegramm(mypath):
                     f"{mypath}/{path_to_file}", 'rb'))
 
 
-def main():
-    try:
-        get_photo_spacex()
-        get_photo_spacenasa()
-        get_photo_space_epic()
-        add_photo_telegramm("images")
-    except requests.exceptions.HTTPError:
-        print("Проверьте вводимый адрес")
-    except requests.exceptions.ConnectionError:
-        print("Нет соединения")
-
-
 if __name__ == "__main__":
     load_dotenv()
     nasa_token = os.environ["NASA_TOKEN"]
     tgm_token = os.environ["TGM_TOKEN"]
 
     while True:
-        main()
+        try:
+            get_photo_spacex()
+            get_photo_spacenasa()
+            get_photo_space_epic()
+            add_photo_telegramm("images")
+        except requests.exceptions.HTTPError:
+            print("Проверьте вводимый адрес")
+        except requests.exceptions.ConnectionError:
+            print("Нет соединения")
         time.sleep(86400)
