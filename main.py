@@ -11,10 +11,16 @@ import telegram
 import time
 
 
-def download_image(url, filename, params={}, ifmain="./images/"):
+def save_folder(ifmain):
     directory = os.path.dirname(ifmain)
     if not os.path.exists(directory):
         os.makedirs(directory)
+    return directory
+
+
+def download_image(url, filename, params={}, ifmain="./images/"):
+    directory = save_folder(ifmain)
+
     response = requests.get(url, params)
     response.raise_for_status()
 
@@ -49,7 +55,7 @@ def get_photo_spacex():
 
 
 def get_photo_spacenasa():
-    url = f"https://api.nasa.gov/planetary/apod"
+    url = "https://api.nasa.gov/planetary/apod"
     params = {"api_key": nasa_token, "count": 30}
     data_spacenasa = execute_request(url, params)
     for image_number, image_url in enumerate(data_spacenasa, start=1):
