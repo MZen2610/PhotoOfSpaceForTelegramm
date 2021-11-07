@@ -53,11 +53,11 @@ def get_photo_spacex():
         download_image(image_url, filename, folder_with_photo="./images/")
 
 
-def get_photo_spacenasa(token):
+def get_photo_space_nasa(token):
     url = "https://api.nasa.gov/planetary/apod"
     params = {"api_key": token, "count": 30}
-    data_spacenasa = execute_request(url, params)
-    for image_number, image_url in enumerate(data_spacenasa, start=1):
+    data_space_nasa = execute_request(url, params)
+    for image_number, image_url in enumerate(data_space_nasa, start=1):
         extension = get_extension(image_url["url"])
         filename = f"spacenasa{image_number}{extension}"
         download_image(image_url["url"], filename,
@@ -88,28 +88,28 @@ def get_photo_space_epic(token):
         download_image(url, filename, params, folder_with_photo="./images/")
 
 
-def add_photo_telegramm(token, mypath):
+def add_photo_telegramm(token, my_path):
     bot = telegram.Bot(token=token)
     updates = bot.get_updates()
     if len(updates) > 0:
         chat_id = updates[-1].effective_chat.id
-        for path_to_file in listdir(mypath):
-            if isfile(joinpath(mypath, path_to_file)):
-                with open(f"{mypath}/{path_to_file}", 'rb') as file:
+        for path_to_file in listdir(my_path):
+            if isfile(joinpath(my_path, path_to_file)):
+                with open(f"{my_path}/{path_to_file}", 'rb') as file:
                     bot.send_document(chat_id=chat_id, document=file.read())
 
 
 def main():
     load_dotenv()
-    nasa_token = os.environ["NASA_TOKEN"]
-    tgm_token = os.environ["TGM_TOKEN"]
+    NASA_TOKEN = os.environ["NASA_TOKEN"]
+    TGM_TOKEN = os.environ["TGM_TOKEN"]
 
     while True:
         try:
             get_photo_spacex()
-            get_photo_spacenasa(nasa_token)
-            get_photo_space_epic(nasa_token)
-            add_photo_telegramm(tgm_token, "images")
+            get_photo_space_nasa(NASA_TOKEN)
+            get_photo_space_epic(NASA_TOKEN)
+            add_photo_telegramm(TGM_TOKEN, "images")
         except requests.exceptions.HTTPError:
             print("Проверьте вводимый адрес")
         except requests.exceptions.ConnectionError:
