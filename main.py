@@ -97,7 +97,7 @@ def add_telegramm_photos(token, my_path):
             if isfile(joinpath(my_path, path_to_file)):
                 with open(f"{my_path}/{path_to_file}", 'rb') as file:
                     bot.send_document(chat_id=chat_id, document=file.read())
-
+                    time.sleep(86400)
 
 def main():
     load_dotenv()
@@ -114,8 +114,6 @@ def main():
             print("Проверьте вводимый адрес")
         except requests.exceptions.ConnectionError:
             print("Нет соединения")
-
-        time.sleep(86400)
 
 
 if __name__ == "__main__":
