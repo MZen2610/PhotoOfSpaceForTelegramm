@@ -36,7 +36,7 @@ def execute_request(url: str, payload=dict()):
     return response.json()
 
 
-def get_spacex_photos():
+def download_spacex_photos():
     url = "https://api.spacexdata.com/v3/launches/past"
     data_json = execute_request(url)
     step = 1
@@ -52,7 +52,7 @@ def get_spacex_photos():
                         directory=save_folder("./images/"))
 
 
-def get_space_nasa_photos(token):
+def download_space_nasa_photos(token):
     url = "https://api.nasa.gov/planetary/apod"
     params = {"api_key": token, "count": 30}
     data_json = execute_request(url, params)
@@ -63,7 +63,7 @@ def get_space_nasa_photos(token):
                         directory=save_folder("./images/"))
 
 
-def get_space_epic_photos(token):
+def download_space_epic_photos(token):
     today = datetime.date(datetime.today())
     url = f"https://api.nasa.gov/EPIC/api/natural/date/{today}"
     params = {"api_key": token}
@@ -99,6 +99,7 @@ def add_telegramm_photos(token, my_path):
                     bot.send_document(chat_id=chat_id, document=file.read())
                     time.sleep(86400)
 
+
 def main():
     load_dotenv()
     NASA_TOKEN = os.environ["NASA_TOKEN"]
@@ -106,9 +107,9 @@ def main():
 
     while True:
         try:
-            get_spacex_photos()
-            get_space_nasa_photos(NASA_TOKEN)
-            get_space_epic_photos(NASA_TOKEN)
+            download_spacex_photos()
+            download_space_nasa_photos(NASA_TOKEN)
+            download_space_epic_photos(NASA_TOKEN)
             add_telegramm_photos(TGM_TOKEN, "images")
         except requests.exceptions.HTTPError:
             print("Проверьте вводимый адрес")
