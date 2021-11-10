@@ -11,8 +11,8 @@ import telegram
 import time
 
 
-def save_folder(ifmain):
-    directory = os.path.dirname(ifmain)
+def save_folder(download_folder):
+    directory = os.path.dirname(download_folder)
     os.makedirs(directory, exist_ok=True)
     return directory
 
