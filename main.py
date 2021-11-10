@@ -87,15 +87,15 @@ def download_space_epic_photos(token):
                        params=params)
 
 
-def add_telegramm_photos(token, path):
+def add_telegramm_photos(token, chat_id, path):
     bot = telegram.Bot(token=token)
     updates = bot.get_updates()
     if len(updates) > 0:
-        chat_id = updates[-1].effective_chat.id
         for path_to_file in listdir(path):
             if isfile(joinpath(path, path_to_file)):
                 with open(f"{path}/{path_to_file}", 'rb') as file:
-                    bot.send_document(chat_id=chat_id, document=file.read())
+                    # bot.send_document(chat_id=chat_id, document=file.read())
+                    bot.send_document(chat_id=chat_id, document=file)
                     time.sleep(86400)
 
 
@@ -103,13 +103,14 @@ def main():
     load_dotenv()
     NASA_TOKEN = os.environ["NASA_TOKEN"]
     TGM_TOKEN = os.environ["TGM_TOKEN"]
+    CHAT_ID = os.environ["CHAT_ID"]
 
     while True:
         try:
             download_spacex_photos()
             download_space_nasa_photos(NASA_TOKEN)
             download_space_epic_photos(NASA_TOKEN)
-            add_telegramm_photos(TGM_TOKEN, "images")
+            add_telegramm_photos(TGM_TOKEN, CHAT_ID, "images")
         except requests.exceptions.HTTPError:
             print("Проверьте вводимый адрес")
         except requests.exceptions.ConnectionError:
