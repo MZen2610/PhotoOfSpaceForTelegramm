@@ -11,7 +11,7 @@ import telegram
 import time
 
 
-def save_folder(download_folder):
+def greate_folder(download_folder):
     directory = os.path.dirname(download_folder)
     os.makedirs(directory, exist_ok=True)
     return directory
@@ -48,7 +48,8 @@ def download_spacex_photos():
     for image_number, image_url in enumerate(images, start=1):
         extension = get_extension(image_url)
         filename = f"spacex{image_number}{extension}"
-        download_image(image_url, filename, directory=save_folder("./images/"))
+        download_image(image_url, filename, directory=greate_folder(
+            "./images/"))
 
 
 def download_space_nasa_photos(token):
@@ -59,7 +60,7 @@ def download_space_nasa_photos(token):
         extension = get_extension(image_url["url"])
         filename = f"spacenasa{image_number}{extension}"
         download_image(image_url["url"], filename,
-                       directory=save_folder("./images/"))
+                       directory=greate_folder("./images/"))
 
 
 def download_space_epic_photos(token):
@@ -83,7 +84,7 @@ def download_space_epic_photos(token):
               f"/{image}.png"
         params = {"api_key": token}
         filename = f"space_epic{image_number}.png"
-        download_image(url, filename, directory=save_folder("./images/"),
+        download_image(url, filename, directory=greate_folder("./images/"),
                        params=params)
 
 
