@@ -101,16 +101,16 @@ def add_telegramm_photos(token, chat_id, path):
 
 def main():
     load_dotenv()
-    NASA_TOKEN = os.environ["NASA_TOKEN"]
-    TGM_TOKEN = os.environ["TGM_TOKEN"]
-    CHAT_ID = os.environ["CHAT_ID"]
+    nasa_token = os.environ["NASA_TOKEN"]
+    tgm_token = os.environ["TGM_TOKEN"]
+    chat_id = os.environ["CHAT_ID"]
 
     while True:
         try:
             download_spacex_photos()
-            download_space_nasa_photos(NASA_TOKEN)
-            download_space_epic_photos(NASA_TOKEN)
-            add_telegramm_photos(TGM_TOKEN, CHAT_ID, "images")
+            download_space_nasa_photos(nasa_token)
+            download_space_epic_photos(nasa_token)
+            add_telegramm_photos(tgm_token, chat_id, "images")
         except requests.exceptions.HTTPError:
             print("Проверьте вводимый адрес")
         except requests.exceptions.ConnectionError:
