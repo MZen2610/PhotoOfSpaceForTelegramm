@@ -17,7 +17,7 @@ def save_folder(download_folder):
     return directory
 
 
-def download_images(url, filename, directory, params={}):
+def download_image(url, filename, directory, params={}):
     response = requests.get(url, params)
     response.raise_for_status()
 
@@ -48,8 +48,7 @@ def download_spacex_photos():
     for image_number, image_url in enumerate(images, start=1):
         extension = get_extension(image_url)
         filename = f"spacex{image_number}{extension}"
-        download_images(image_url, filename,
-                        directory=save_folder("./images/"))
+        download_image(image_url, filename, directory=save_folder("./images/"))
 
 
 def download_space_nasa_photos(token):
@@ -59,8 +58,8 @@ def download_space_nasa_photos(token):
     for image_number, image_url in enumerate(request_data, start=1):
         extension = get_extension(image_url["url"])
         filename = f"spacenasa{image_number}{extension}"
-        download_images(image_url["url"], filename,
-                        directory=save_folder("./images/"))
+        download_image(image_url["url"], filename,
+                       directory=save_folder("./images/"))
 
 
 def download_space_epic_photos(token):
@@ -84,8 +83,8 @@ def download_space_epic_photos(token):
               f"/{image}.png"
         params = {"api_key": token}
         filename = f"space_epic{image_number}.png"
-        download_images(url, filename, directory=save_folder("./images/"),
-                        params=params)
+        download_image(url, filename, directory=save_folder("./images/"),
+                       params=params)
 
 
 def add_telegramm_photos(token, path):
