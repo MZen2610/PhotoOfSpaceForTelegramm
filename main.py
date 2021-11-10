@@ -38,12 +38,12 @@ def execute_request(url: str, payload=dict()):
 
 def download_spacex_photos():
     url = "https://api.spacexdata.com/v3/launches/past"
-    data_json = execute_request(url)
+    request_data = execute_request(url)
     step = 1
-    images = data_json[-step]["links"]["flickr_images"]
+    images = request_data[-step]["links"]["flickr_images"]
     while len(images) == 0:
         step += 1
-        images = data_json[-step]["links"]["flickr_images"]
+        images = request_data[-step]["links"]["flickr_images"]
 
     for image_number, image_url in enumerate(images, start=1):
         extension = get_extension(image_url)
@@ -55,8 +55,8 @@ def download_spacex_photos():
 def download_space_nasa_photos(token):
     url = "https://api.nasa.gov/planetary/apod"
     params = {"api_key": token, "count": 30}
-    data_json = execute_request(url, params)
-    for image_number, image_url in enumerate(data_json, start=1):
+    request_data = execute_request(url, params)
+    for image_number, image_url in enumerate(request_data, start=1):
         extension = get_extension(image_url["url"])
         filename = f"spacenasa{image_number}{extension}"
         download_images(image_url["url"], filename,
@@ -67,16 +67,16 @@ def download_space_epic_photos(token):
     today = datetime.date(datetime.today())
     url = f"https://api.nasa.gov/EPIC/api/natural/date/{today}"
     params = {"api_key": token}
-    data_json = execute_request(url, params)
+    request_data = execute_request(url, params)
     step = 1
-    while len(data_json) == 0:
+    while len(request_data) == 0:
         result_date = today - timedelta(days=step)
         url = f"https://api.nasa.gov/EPIC/api/natural/date/{result_date}"
         params = {"api_key": token}
-        data_json = execute_request(url, params)
+        request_data = execute_request(url, params)
         step += 1
 
-    for image_number, image_url in enumerate(data_json, start=1):
+    for image_number, image_url in enumerate(request_data, start=1):
         image_date = datetime.fromisoformat(image_url["date"]).strftime(
             "%Y/%m/%d")
         image = image_url["image"]
