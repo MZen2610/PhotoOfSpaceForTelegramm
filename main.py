@@ -88,7 +88,7 @@ def download_space_epic_photos(token):
                        params=params)
 
 
-def add_telegramm_photos(token, chat_id, path):
+def publish_telegramm_photos(token, chat_id, path):
     bot = telegram.Bot(token=token)
     updates = bot.get_updates()
     if len(updates) > 0:
@@ -111,7 +111,7 @@ def main():
             download_spacex_photos()
             download_space_nasa_photos(nasa_token)
             download_space_epic_photos(nasa_token)
-            add_telegramm_photos(tgm_token, chat_id, "images")
+            publish_telegramm_photos(tgm_token, chat_id, "images")
         except requests.exceptions.HTTPError:
             print("Проверьте вводимый адрес")
         except requests.exceptions.ConnectionError:
