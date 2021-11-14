@@ -41,7 +41,7 @@ def download_spacex_photos():
     query_string = execute_request(url)
     step = 1
     images = query_string[-step]["links"]["flickr_images"]
-    while len(images) == 0:
+    while not len(images):
         step += 1
         images = query_string[-step]["links"]["flickr_images"]
 
@@ -69,7 +69,7 @@ def download_space_epic_photos(token):
     params = {"api_key": token}
     query_string = execute_request(url, params)
     step = 1
-    while len(query_string) == 0:
+    while not len(query_string):
         result_date = today - timedelta(days=step)
         url = f"https://api.nasa.gov/EPIC/api/natural/date/{result_date}"
         params = {"api_key": token}
