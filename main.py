@@ -88,13 +88,17 @@ def download_space_epic_photos(token):
                        params=params)
 
 
-def publish_telegramm_photos(token, chat_id, path):
-    bot = telegram.Bot(token=token)
+def enumeration_and_send_photo(bot, path, chat_id):
     for path_to_file in listdir(path):
         if isfile(joinpath(path, path_to_file)):
             with open(f"{path}/{path_to_file}", 'rb') as file:
                 bot.send_document(chat_id=chat_id, document=file)
                 time.sleep(86400)
+
+
+def publish_telegramm_photos(token, chat_id, path):
+    bot = telegram.Bot(token=token)
+    enumeration_and_send_photo(bot, path, chat_id)
 
 
 def main():
